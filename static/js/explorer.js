@@ -259,6 +259,18 @@ const mapApp = {
   },
 
   async toggleFavorite(atcoCode) {
+    console.log("Login status:", window.isLoggedIn);
+
+    if (
+      window.isLoggedIn === "false" ||
+      window.isLoggedIn === false ||
+      !window.isLoggedIn
+    ) {
+      alert("Please log in to add favourites.");
+      window.location.href = "/login";
+      return;
+    }
+
     const marker = this.allMarkers.find((m) => m.stopData.atco === atcoCode);
 
     if (!marker) return;

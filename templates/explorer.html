@@ -134,6 +134,10 @@
   src="https://kit.fontawesome.com/a2e0e6ad48.js"
   crossorigin="anonymous"
 ></script>
+<script>
+  window.isLoggedIn = "{{ 'true' if session.get('user_id') else 'false' }}";
+</script>
+
 <script src="{{ url_for('static', filename='js/explorer.js') }}"></script>
 <script src="{{ url_for('static', filename='js/favorites.js') }}"></script>
 

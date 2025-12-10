@@ -118,6 +118,8 @@ def explorer():
 @csrf_protected
 def toggle_favorite():
     try:
+        if not get_current_user_id():
+            return jsonify({'success': False, 'error': 'not_logged_in'}), 401
         data = request.get_json()
         print(f"DEBUG toggle_favorite: Received data: {data}")
         
