@@ -1,0 +1,211 @@
+{% extends "base.html" %} {% block title %}Bus Explorer - Map & Table{% endblock
+%} {% block extra_css %}
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/explorer.css') }}"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Istok+Web:wght@400;700&family=Bakbak+One&family=Inria+Serif:wght@400;700&display=swap"
+  rel="stylesheet"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/favorites.css') }}"
+/>
+
+{% endblock %} {% block content %}
+<div class="explorer-page">
+  <div class="explorer-container">
+
+    <aside class="sidebar">
+      <div class="section">
+        <h2>My Favorites</h2>
+        <ul class="feature-list">
+          <li onclick="window.location.href='/favorites'">
+            <i class="fas fa-heart"></i> View My Favorites
+            <span id="sidebar-favorites-badge" class="favorites-badge"></span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>Nearby Bus Stops</h2>
+        <ul class="feature-list">
+          <li onclick="mapApp.findNearestStop()">
+            <i class="fas fa-location-arrow"></i> Find Nearest Stop
+          </li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2 class="collapsible" onclick="mapApp.toggleAuthorityList()">
+          Filter Authority</i>
+        </h2>
+        <div id="authority-list" class="authority-list"></div>
+      </div>
+
+      <hr />
+
+      <div class="section quick-actions">
+        <h2>Quick Actions</h2>
+        <ul class="feature-list">
+          <li onclick="mapApp.zoomToBristol()">
+            <i class="fas fa-crosshairs"></i> Zoom to Bristol
+          </li>
+          <li onclick="mapApp.showAllStops()">
+            <i class="fas fa-eye"></i> Show All Stops
+          </li>
+          <li onclick="mapApp.clearMap()">
+            <i class="fas fa-trash"></i> Clear Map
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+
+    <section class="map-container">
+
+      <div class="header-bar">
+
+        <div class="center-toggle">
+          <span>Map</span>
+          <label class="switch">
+            <input
+              type="checkbox"
+              id="viewToggle"
+              onchange="mapApp.toggleView()"
+            />
+            <span class="slider"></span>
+          </label>
+          <span>Table</span>
+        </div>
+
+  
+        <div id="map-search" class="universal-search">
+          <input
+            id="mapSearch"
+            type="text"
+            placeholder="Search bus stops on map…"
+          />
+        </div>
+        <div id="table-search" class="universal-search">
+          <input id="tableSearch" type="text" placeholder="Search in table…" />
+        </div>
+      </div>
+
+      <div id="map-view" class="view-panel active-view">
+        <div id="map"></div>
+      </div>
+
+
+      <div id="table-view" class="view-panel">
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Stop</th>
+                <th>Street</th>
+                <th>Locality</th>
+                <th>Authority</th>
+                <th>Lines</th>
+                <th>ATCO</th>
+                <th>Favorite</th>
+              </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="status-panel">
+        <strong>Status: </strong>
+        <span id="status">Loading bus stops…</span>
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script
+  src="https://kit.fontawesome.com/a2e0e6ad48.js"
+  crossorigin="anonymous"
+></script>
+<script src="{{ url_for('static', filename='js/explorer.js') }}"></script>
+<script src="{{ url_for('static', filename='js/favorites.js') }}"></script>
+
+<script>
+
+  document.addEventListener("DOMContentLoaded", function () {
+ 
+    setTimeout(function () {
+      if (typeof mapApp !== "undefined") {
+ 
+        mapApp.addFavoriteToPopup = function (stopData) {
+          return `
+          <div class="favorite-heart" data-atco="${
+            stopData.atco
+          }" onclick="handleFavoriteClick(${JSON.stringify(stopData).replace(
+            /"/g,
+            "&quot;"
+          )})">
+            <div class="heart-icon">
+              <i class="far fa-heart"></i>
+            </div>
+          </div>
+        `;
+        };
+
+ 
+        mapApp.addFavoriteToTableRow = function (stopData) {
+          return `
+          <td>
+            <button class="favorite-table-btn" data-atco="${
+              stopData.atco
+            }" onclick="handleFavoriteClick(${JSON.stringify(stopData).replace(
+            /"/g,
+            "&quot;"
+          )})">
+              <i class="far fa-heart"></i>
+            </button>
+          </td>
+        `;
+        };
+
+
+        mapApp.showMyFavorites = async function () {
+          try {
+            const response = await fetch("/get_favorites_count");
+            const result = await response.json();
+
+            if (result.count > 0) {
+        
+              alert(
+                `You have ${result.count} favorite stops. They would be highlighted on the map.`
+              );
+            } else {
+              alert(
+                "You have no favorite stops yet. Click the heart icon on bus stops to add them."
+              );
+            }
+          } catch (error) {
+            console.error("Error showing favorites:", error);
+          }
+        };
+
+      
+        updateFavoritesBadge();
+
+  
+        const sidebarBadge = document.getElementById("sidebar-favorites-badge");
+        if (sidebarBadge && typeof updateFavoritesBadge === "function") {
+          updateFavoritesBadge();
+        }
+      }
+    }, 1000);
+  });
+</script>
+{% endblock %}

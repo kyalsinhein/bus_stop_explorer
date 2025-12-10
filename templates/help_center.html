@@ -1,0 +1,281 @@
+{% extends "base.html" %} {% block title %}Help Center - Bus Explorer{% endblock
+%} {% block extra_css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/help_center.css') }}"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Istok+Web:wght@400;700&family=Bakbak+One&family=Inria+Serif:wght@400;700&display=swap"
+  rel="stylesheet"
+/>
+{% endblock %} {% block content %}
+<div class="help-center-container">
+  <div class="help-header">
+    <h1><i class="fas fa-question-circle"></i> Help Center</h1>
+    <p>Find answers to frequently asked questions and get support</p>
+  </div>
+
+  <div class="help-content">
+    <div class="search-section">
+      <div class="search-box">
+        <input type="text" placeholder="Search for help..." id="helpSearch" />
+        <button type="button"><i class="fas fa-search"></i></button>
+      </div>
+    </div>
+
+    <div class="faq-section">
+      <h2>Frequently Asked Questions</h2>
+
+      <div class="faq-categories">
+        <div class="category active" data-category="general">General</div>
+        <div class="category" data-category="navigation">Navigation</div>
+        <div class="category" data-category="account">Account</div>
+        <div class="category" data-category="technical">Technical</div>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-category-content active" id="general">
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>What is Bus Explorer?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Bus Explorer is a comprehensive web application that helps you
+                discover and navigate Bristol's bus network. You can find bus
+                stops, view routes, save favorite stops, and plan your journeys.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>Is Bus Explorer free to use?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Yes! Bus Explorer is completely free to use. We believe in
+                providing accessible transportation information to everyone in
+                Bristol.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>How often is the bus data updated?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Our bus stop data is updated regularly to ensure accuracy. We
+                work with local transportation authorities to maintain current
+                information.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-category-content" id="navigation">
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>How do I find nearby bus stops?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Click the "Find Nearest Stop" button in the Bus Explorer
+                sidebar. This will use your device's location to show the
+                closest bus stops to you.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>Can I search for specific bus stops?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Yes! Use the search bar in the top-right corner of the Bus
+                Explorer page to search for stops by name, street, or locality.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>How do I save favorite bus stops?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Click on any bus stop marker on the map, then click the heart
+                icon in the popup. You need to be logged in to save favorites.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-category-content" id="account">
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>Do I need an account to use Bus Explorer?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                No, you can use most features without an account. However,
+                creating an account allows you to save favorite bus stops and
+                access your personalized dashboard.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>How do I reset my password?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Go to the login page and click "Forgot Password." You'll receive
+                an email with instructions to reset your password.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>Can I delete my account?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Yes, you can delete your account from the Profile page. Please
+                note that this will permanently remove all your saved favorites
+                and data.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-category-content" id="technical">
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>The map isn't loading properly. What should I do?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Try refreshing the page, clearing your browser cache, or
+                checking your internet connection. If the issue persists, please
+                report it using the feedback form.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>Is Bus Explorer mobile-friendly?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Yes! Bus Explorer is fully responsive and works great on mobile
+                devices, tablets, and desktop computers.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>Which browsers are supported?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Bus Explorer works on all modern browsers including Chrome,
+                Firefox, Safari, and Edge. We recommend using the latest version
+                for the best experience.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="support-section">
+      <div class="support-card">
+        <i class="fas fa-headset"></i>
+        <h3>Still Need Help?</h3>
+        <p>
+          Can't find what you're looking for? Our support team is here to help
+          you.
+        </p>
+        <div class="support-actions">
+          <a href="{{ url_for('feedback') }}" class="support-button">
+            <i class="fas fa-comments"></i> Send Feedback
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  // FAQ toggle functionality
+  document.querySelectorAll(".faq-question").forEach((question) => {
+    question.addEventListener("click", () => {
+      const answer = question.nextElementSibling;
+      const icon = question.querySelector("i");
+
+      answer.classList.toggle("active");
+      icon.classList.toggle("fa-chevron-down");
+      icon.classList.toggle("fa-chevron-up");
+    });
+  });
+
+  // Category switching
+  document.querySelectorAll(".category").forEach((category) => {
+    category.addEventListener("click", () => {
+      // Remove active class from all categories and contents
+      document
+        .querySelectorAll(".category")
+        .forEach((c) => c.classList.remove("active"));
+      document
+        .querySelectorAll(".faq-category-content")
+        .forEach((c) => c.classList.remove("active"));
+
+      // Add active class to clicked category and corresponding content
+      category.classList.add("active");
+      const categoryId = category.getAttribute("data-category");
+      document.getElementById(categoryId).classList.add("active");
+    });
+  });
+
+  // Search functionality
+  document.getElementById("helpSearch").addEventListener("input", function (e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const faqItems = document.querySelectorAll(".faq-item");
+
+    faqItems.forEach((item) => {
+      const question = item
+        .querySelector(".faq-question h3")
+        .textContent.toLowerCase();
+      const answer = item
+        .querySelector(".faq-answer p")
+        .textContent.toLowerCase();
+
+      if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+        item.style.display = "block";
+      } else {
+        item.style.display = "none";
+      }
+    });
+  });
+</script>
+{% endblock %}

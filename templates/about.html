@@ -1,0 +1,184 @@
+{% extends "base.html" %} {% block title %}About Us - Bristol Bus Stop
+Explorer{% endblock %} {% block extra_css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/about.css') }}"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Istok+Web:wght@400;700&family=Bakbak+One&family=Inria+Serif:wght@400;700&display=swap"
+  rel="stylesheet"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+/>
+{% endblock %} {% block content %}
+<div class="about-page">
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-title">About Bristol Bus Stop Explorer</h1>
+        <p class="hero-subtitle">
+          Transforming how Bristol navigates public transport
+        </p>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-number">1000+</span>
+            <span class="stat-label">Bus Stops</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">24/7</span>
+            <span class="stat-label">Access</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">Open</span>
+            <span class="stat-label">Data Source</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="content-sections-grid">
+      <section class="content-card">
+        <div class="card-icon">
+          <i class="fas fa-bullseye"></i>
+        </div>
+        <h2>Our Mission</h2>
+        <p>
+          To simplify public transport navigation in Bristol by providing an
+          intuitive platform that helps residents, visitors, and commuters
+          discover bus stops easily.
+        </p>
+      </section>
+
+      <section class="content-card">
+        <div class="card-icon">
+          <i class="fas fa-eye"></i>
+        </div>
+        <h2>Our Vision</h2>
+        <p>
+          To become Bristol's most trusted public transport companion by
+          connecting people with their city through accessible and transparent
+          technology.
+        </p>
+      </section>
+
+      <section class="content-card">
+        <div class="card-icon">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h2>The Challenge</h2>
+        <p>
+          Bristol's bus network can be confusing, especially for newcomers or
+          visitors. Traditional maps lack the precision needed to locate exact
+          stop positions.
+        </p>
+      </section>
+
+      <section class="content-card">
+        <div class="card-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <h2>Our Solution</h2>
+        <p>
+          A clean and intuitive platform that visualizes every bus stop with
+          accurate location data, helping users plan journeys with clarity and
+          confidence.
+        </p>
+      </section>
+    </div>
+
+    <section class="features-section">
+      <div class="section-header">
+        <h2>Key Features</h2>
+        <p>Everything you need for seamless bus travel</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-map-marked-alt"></i></div>
+          <h3>Comprehensive Coverage</h3>
+          <p>
+            Detailed information for bus stops across Bristol and surrounding
+            areas with precise geolocation.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-compass"></i>
+          </div>
+          <h3>Seamless Navigation</h3>
+          <p>
+            Designed to provide a clear and intuitive experience, making it easy
+            for users to explore bus stop information effortlessly.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-star"></i></div>
+          <h3>Personalized Experience</h3>
+          <p>
+            Save favorite stops, create custom lists, and access them instantly
+            whenever needed.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="data-source-section">
+      <div class="section-header">
+        <h2>Transparent Data Source</h2>
+        <p>Powered by Bristol's official open data initiative</p>
+      </div>
+
+      <div class="data-source-content">
+        <div class="data-info">
+          <h3><i class="fas fa-code-branch"></i> Bristol Open Data</h3>
+          <p>
+            Our platform utilizes the official Bristol Bus Stops dataset from
+            <strong>Open Data Bristol</strong>.
+          </p>
+          <a
+            href="https://opendata.bristol.gov.uk/datasets/1d03b8edb6474ebfa333e0181992f075_4/explore"
+            class="data-link"
+            target="_blank"
+          >
+            Explore the dataset <i class="fas fa-external-link-alt"></i>
+          </a>
+        </div>
+
+        <div class="data-visualization">
+          <div class="map-container">
+            <iframe
+              src="https://opendata.bristol.gov.uk/datasets/1d03b8edb6474ebfa333e0181992f075_4/explore?embed_map=true"
+              class="data-iframe"
+              title="Bristol Bus Stops Open Data Map"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="aboutus-contact-section">
+      <h2>Get In Touch</h2>
+      <p>Have suggestions or feedback? We'd love to hear from you!</p>
+
+      <div class="aboutus-contact-info">
+        <div class="aboutus-contact-item">
+          <i class="fas fa-envelope"></i>
+          <span>info@busstopexplorer.com</span>
+        </div>
+
+        <div class="aboutus-contact-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <span>Bristol, United Kingdom</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}

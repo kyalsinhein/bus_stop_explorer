@@ -1,0 +1,107 @@
+{% extends "base.html" %} {% block title %}Home - Bus Stop Explorer{% endblock
+%} {% block extra_css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/index.css') }}"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Istok+Web:wght@400;700&family=Bakbak+One&family=Inria+Serif:wght@400;700&display=swap"
+  rel="stylesheet"
+/>
+
+{% endblock %} {% block content %}
+<div class="home-page">
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1>Welcome to Bristol Bus Stop Explorer</h1>
+      <p>A simple and intuitive way to explore bus stops across Bristol</p>
+
+      <a href="{{ url_for('explorer') }}" class="cta-button">
+        Explore Bus Stops <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+
+    <div class="hero-image">
+      <img
+        src="{{ url_for('static', filename='images/bus logo.png') }}"
+        alt="Bus Logo"
+        class="hero-icon"
+      />
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="container">
+      <h2>What is Bristol Bus Stop Explorer?</h2>
+
+      <div class="content-grid">
+        <div class="content-text">
+          <p>
+            Bristol Bus Stop Explorer is a lightweight and user-friendly web
+            application designed to help people discover bus stops across
+            Bristol. It focuses on providing clear stop information and an
+            interactive map rather than real-time bus tracking.
+          </p>
+
+          <p>
+            Whether you are new to the city or simply want to understand where
+            nearby stops are located, the platform makes it easy to visually
+            explore stop positions, view stop details, and search instantly.
+          </p>
+
+          <p>
+            You can also save your favourite bus stops for quick access,
+            creating a personalised experience based on your daily travel needs.
+          </p>
+        </div>
+
+        <div class="content-features">
+          <div class="feature-card">
+            <i class="fas fa-map-marked-alt"></i>
+            <h3>Interactive Map</h3>
+            <p>Discover every bus stop using a clean and responsive map</p>
+          </div>
+
+          <div class="feature-card">
+            <i class="fas fa-search"></i>
+            <h3>Smart Stop Search</h3>
+            <p>Search bus stops by name, street, or keywords</p>
+          </div>
+
+          <div class="feature-card">
+            <i class="fas fa-star"></i>
+            <h3>Favourites System</h3>
+            <p>Save and manage your favourite stops with ease</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats-section">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <h3>500+</h3>
+          <p>Bus Stops</p>
+        </div>
+
+        <div class="stat-item">
+          <h3>50+</h3>
+          <p>Neighbourhoods Covered</p>
+        </div>
+
+        <div class="stat-item">
+          <h3>1</h3>
+          <p>Simple Explorer Tool</p>
+        </div>
+
+        <div class="stat-item">
+          <h3>100%</h3>
+          <p>Free to Use</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}

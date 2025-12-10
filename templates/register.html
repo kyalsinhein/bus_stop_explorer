@@ -1,0 +1,53 @@
+{% extends "base.html" %} {% block title %}Register - Bus Explorer{% endblock %}
+{% block extra_css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/auth.css') }}"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Istok+Web:wght@400;700&family=Bakbak+One&family=Inria+Serif:wght@400;700&display=swap"
+  rel="stylesheet"
+/>
+{% endblock %} {% block content %}
+<div class="auth-container">
+  <div class="auth-card">
+    <h2><i class="fas fa-user-plus"></i> Create Account</h2>
+
+    <form method="POST" class="auth-form">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required />
+      </div>
+
+      <div class="form-group">
+        <label for="confirm_password">Confirm Password</label>
+        <input
+          type="password"
+          id="confirm_password"
+          name="confirm_password"
+          required
+        />
+      </div>
+
+      <button type="submit" class="auth-button">Register</button>
+    </form>
+
+    <div class="auth-links">
+      <p>
+        Already have an account? <a href="{{ url_for('login') }}">Login here</a>
+      </p>
+      <p><a href="{{ url_for('home') }}">← Back to Home</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

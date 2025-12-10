@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Bus Stop Explorer{% endblock %}</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Istok+Web:wght@400;700&family=Bakbak+One&family=Inria+Serif:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/base.css') }}"
+    />
+
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+
+    {% block extra_css %}{% endblock %}
+  </head>
+
+  <body>
+    <header class="header">
+      <div class="header-content">
+        <div class="logo">
+          <h1><i class="fas fa-bus"></i> Bristol Bus Stop Explorer</h1>
+        </div>
+
+        <nav>
+          <ul class="nav-links">
+            <li>
+              <a
+                href="{{ url_for('home') }}"
+                class="{% if request.endpoint == 'home' %}active{% endif %}"
+              >
+                Home
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="{{ url_for('explorer') }}"
+                class="{% if request.endpoint == 'explorer' %}active{% endif %}"
+              >
+                Explorer
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="{{ url_for('about') }}"
+                class="{% if request.endpoint == 'about' %}active{% endif %}"
+              >
+                About Us
+              </a>
+            </li>
+
+            <li>
+              <a
+                href="{{ url_for('favorites') }}"
+                class="favorites-nav-link {% if request.endpoint == 'favorites' %}active{% endif %}"
+              >
+                <i class="fas fa-heart"></i> Favourites
+                <span id="favorites-badge" class="favorites-badge"></span>
+              </a>
+            </li>
+
+            {% if session.user_id %}
+            <li>
+              <a
+                href="{{ url_for('profile') }}"
+                class="{% if request.endpoint == 'profile' %}active{% endif %}"
+              >
+                <i class="fas fa-user"></i> Profile
+              </a>
+            </li>
+            <li>
+              <a href="{{ url_for('logout') }}" class="logout-link">
+                <i class="fas fa-sign-out-alt"></i> Logout
+              </a>
+            </li>
+            {% else %}
+            <li>
+              <a
+                href="{{ url_for('login') }}"
+                class="{% if request.endpoint == 'login' %}active{% endif %}"
+              >
+                <i class="fas fa-sign-in-alt"></i> Login
+              </a>
+            </li>
+            <li>
+              <a
+                href="{{ url_for('register') }}"
+                class="{% if request.endpoint == 'register' %}active{% endif %}"
+              >
+                <i class="fas fa-user-plus"></i> Register
+              </a>
+            </li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %}
+    <div class="flash-messages">
+      {% for category, message in messages %}
+      <div class="flash-message {{ category }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+    {% endif %} {% endwith %}
+
+    <main class="main-content">{% block content %}{% endblock %}</main>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-main">
+          <div class="footer-brand">
+            <div class="footer-logo">
+              <i class="fas fa-bus"></i>
+              <span>Bristol Bus Stop Explorer</span>
+            </div>
+            <p class="footer-description">
+              Explore bus stops across Bristol. Search, discover, and bookmark
+              your favourite stops.
+            </p>
+
+            <div class="footer-social">
+              <a href="#" class="social-link"
+                ><i class="fab fa-facebook-f"></i
+              ></a>
+              <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="social-link"
+                ><i class="fab fa-instagram"></i
+              ></a>
+              <a href="#" class="social-link"
+                ><i class="fab fa-linkedin-in"></i
+              ></a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h3>Quick Links</h3>
+            <ul class="footer-links">
+              <li>
+                <a href="{{ url_for('home') }}"
+                  ><i class="fas fa-home"></i> Home</a
+                >
+              </li>
+              <li>
+                <a href="{{ url_for('explorer') }}"
+                  ><i class="fas fa-map"></i> Stop Explorer</a
+                >
+              </li>
+              <li>
+                <a href="{{ url_for('favorites') }}"
+                  ><i class="fas fa-heart"></i> Favourites</a
+                >
+              </li>
+              <li>
+                <a href="{{ url_for('about') }}"
+                  ><i class="fas fa-info-circle"></i> About Us</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-section">
+            <h3>Support</h3>
+            <ul class="footer-links">
+              <li>
+                <a href="{{ url_for('help_center') }}">
+                  <i class="fas fa-question-circle"></i> Help Centre
+                </a>
+              </li>
+
+              <li>
+                <a href="{{ url_for('feedback') }}">
+                  <i class="fas fa-comments"></i> Feedback
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-section">
+            <h3>Contact Info</h3>
+
+            <div class="contact-info">
+              <div class="contact-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Bristol, United Kingdom</span>
+              </div>
+
+              <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <span>info@busstopexplorer.com</span>
+              </div>
+
+              <div class="contact-item">
+                <i class="fas fa-phone"></i>
+                <span>+44 123 456 7890</span>
+              </div>
+
+              <div class="contact-item">
+                <i class="fas fa-clock"></i>
+                <span>24/7 Support</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <div class="copyright">
+            &copy; 2024 Bus Stop Explorer. All rights reserved.
+          </div>
+
+          <ul class="footer-legal">
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+            <li><a href="#">Sitemap</a></li>
+          </ul>
+
+          <button class="back-to-top" onclick="scrollToTop()">
+            <i class="fas fa-arrow-up"></i> Back to Top
+          </button>
+        </div>
+      </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/favorites.js') }}"></script>
+
+    <script>
+      function getCSRFToken() {
+        const meta = document.querySelector('meta[name="csrf-token"]');
+        return meta ? meta.getAttribute("content") : "";
+      }
+
+      function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      window.addEventListener("scroll", () => {
+        const backToTop = document.querySelector(".back-to-top");
+        backToTop.style.display = window.scrollY > 300 ? "flex" : "none";
+      });
+    </script>
+
+    {% block scripts %}{% endblock %}
+  </body>
+</html>
