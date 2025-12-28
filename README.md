@@ -1,4 +1,4 @@
-# Bristol Bus Explorer
+# Bristol Bus Stop Explorer
 
 ![Bristol Bus](https://img.shields.io/badge/Bristol-Bus%20Explorer-blue) ![Web App](https://img.shields.io/badge/Web%20App-Live-brightgreen)
 
