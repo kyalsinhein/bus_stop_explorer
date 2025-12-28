@@ -12,19 +12,19 @@ The main idea behind the project was to create a tool that saves time and reduce
 
 ## 🚀 Key Features
 
-**Favourite Button** – Save your most-used routes or stops for quick access
+- **Favourite Button** – Save your most-used routes or stops for quick access
 
-**Explore Bus Stops** – Browse all bus stops in Bristol with relevant details
+- **Explore Bus Stops** – Browse all bus stops in Bristol with relevant details
 
-**Edit Profile** – Update your personal information and preferences easily
+- **Edit Profile** – Update your personal information and preferences easily
 
-**Nearby Bus Stops** – Find the closest bus stops based on your current location
+- **Nearby Bus Stops** – Find the closest bus stops based on your current location
 
-**Search by Authority Name** – Quickly locate buses or routes by the operating authority
+- **Search by Authority Name** – Quickly locate buses or routes by the operating authority
 
-**Bus Name and Number Display** – See bus names and numbers in both table and map view
+- **Bus Name and Number Display** – See bus names and numbers in both table and map view
 
-**Clear Design** – Intuitive and user-friendly interface for smooth navigation
+- **Clear Design** – Intuitive and user-friendly interface for smooth navigation
 
 ---
 
