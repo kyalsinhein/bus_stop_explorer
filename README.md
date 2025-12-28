@@ -25,6 +25,7 @@ The main idea behind the project was to create a tool that saves time and reduce
 **Bus Name and Number Display** – See bus names and numbers in both table and map view
 
 **Clear Design** – Intuitive and user-friendly interface for smooth navigation
+
 ---
 
 ## ⚙️ Technologies Used
