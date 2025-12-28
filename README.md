@@ -30,7 +30,6 @@ The main idea behind the project was to create a tool that saves time and reduce
 
 ## ⚙️ Technologies Used
 
-HTML      
-CSS        
+HTML/CSS        
 JavaScript 
 Python     
