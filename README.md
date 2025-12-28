@@ -4,9 +4,9 @@
 
 Live App: 🌐 https://bus-stop-explorer.onrender.com
 
-Bristol Bus Explorer is a web-based application designed to help commuters and travelers navigate the bus network in Bristol with ease. The app provides information about bus routes, stops, schedules, and travel planning, making it easier for users to plan their journeys in the city.
+Bristol Bus Stop Explorer is a web-based application designed to help commuters and travelers easily find bus stops in Bristol. The app provides information about stop locations, nearby amenities, and schedules, making it easier for users to plan their journeys.
 
-The main idea behind the project was to create a tool that saves time and reduces confusion for people relying on public transport. Instead of checking multiple websites or waiting at stops, users can quickly find the route they need, view nearby stops on a map, and get estimated travel times.
+The main goal of the project is to save time and reduce confusion for people using public transport. Instead of checking multiple websites or wandering around the city, users can quickly locate nearby bus stops and access important information about them.
 
 ---
 
