@@ -2,7 +2,7 @@
 
 ![Bristol Bus](https://img.shields.io/badge/Bristol-Bus%20Explorer-blue) ![Web App](https://img.shields.io/badge/Web%20App-Live-brightgreen)
 
-Live App: 🌐 https://bus-stop-explorer.onrender.com
+Live App: 🌐 https://bus-stop-explorer.vercel.app
 
 Bristol Bus Stop Explorer is a web-based application designed to help commuters and travelers easily find bus stops in Bristol. The app provides information about stop locations, nearby amenities, and schedules, making it easier for users to plan their journeys.
 
