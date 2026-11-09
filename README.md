@@ -8,24 +8,7 @@ The main goal of the project is to save time and reduce confusion for people usi
 
 ---
 
-## How to run locally
-
-```bash
-pip install -r requirements.txt
-python app.py          # uses a local SQLite file in instance/ when DATABASE_URL is not set
-```
-
-## Deploy to Vercel
-
-1. Create a free Postgres database (Neon, Supabase, or Vercel Marketplace Postgres) and copy its connection string.
-2. Push this folder to GitHub and import it at vercel.com/new (or run `vercel` with the CLI).
-3. In **Project Settings → Environment Variables** add:
-   - `SECRET_KEY` – a long random string (e.g. `python -c "import secrets; print(secrets.token_hex(32))"`)
-   - `DATABASE_URL` – your Postgres connection string
-4. Deploy. Tables are created automatically on first request.
-
-Static files live in `public/static/` so Vercel serves them from its CDN.
-Vercel's filesystem is read-only/ephemeral, which is why SQLite can't be used in production.
+Live Demo : https://bristol-bus-stop-explorer.vercel.app/
 
 ## 🚀 Key Features
 
