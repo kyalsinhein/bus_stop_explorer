@@ -20,9 +20,17 @@ app = Flask(
 def get_database_uri():
     url = os.environ.get('DATABASE_URL') or os.environ.get('POSTGRES_URL')
     if url:
-        # SQLAlchemy needs "postgresql://", some providers give "postgres://"
-        if url.startswith('postgres://'):
-            url = url.replace('postgres://', 'postgresql://', 1)
+        url = url.strip().strip('"').strip("'")
+        # Neon's "Connect" box can copy a whole `psql '...'` command
+        if url.startswith('psql '):
+            url = url[5:].strip().strip('"').strip("'")
+        # Force the psycopg2 driver (the one in requirements.txt), whatever
+        # scheme the provider gave: postgres://, postgresql://, postgresql+psycopg://
+        for prefix in ('postgresql+psycopg2://', 'postgresql+psycopg://',
+                       'postgresql://', 'postgres://'):
+            if url.startswith(prefix):
+                url = 'postgresql+psycopg2://' + url[len(prefix):]
+                break
         return url
     # Fallback so the app still boots. On Vercel the filesystem is read-only
     # except /tmp, and /tmp is wiped between invocations - set DATABASE_URL!
