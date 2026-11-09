@@ -1,16 +1,46 @@
-import string
 from flask import Flask, render_template, jsonify, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-import json
 import os
 from datetime import datetime
 from functools import wraps
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = '123'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ON_VERCEL = bool(os.environ.get('VERCEL'))
+
+# Static files live in public/ so Vercel serves them from its CDN.
+# Flask also serves them from the same place for local development.
+app = Flask(
+    __name__,
+    static_folder=os.path.join(BASE_DIR, 'public', 'static'),
+    static_url_path='/static',
+)
+
+
+def get_database_uri():
+    url = os.environ.get('DATABASE_URL') or os.environ.get('POSTGRES_URL')
+    if url:
+        # SQLAlchemy needs "postgresql://", some providers give "postgres://"
+        if url.startswith('postgres://'):
+            url = url.replace('postgres://', 'postgresql://', 1)
+        return url
+    # Fallback so the app still boots. On Vercel the filesystem is read-only
+    # except /tmp, and /tmp is wiped between invocations - set DATABASE_URL!
+    if ON_VERCEL:
+        return 'sqlite:////tmp/users.db'
+    return 'sqlite:///' + os.path.join(BASE_DIR, 'instance', 'users.db')
+
+
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-only-insecure-key')
+app.config['SQLALCHEMY_DATABASE_URI'] = get_database_uri()
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_pre_ping': True, 'pool_recycle': 280}
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+app.config['SESSION_COOKIE_SECURE'] = ON_VERCEL
+
+if not ON_VERCEL:
+    os.makedirs(os.path.join(BASE_DIR, 'instance'), exist_ok=True)
 
 db = SQLAlchemy(app)
 
@@ -18,7 +48,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(120), nullable=False)
+    password_hash = db.Column(db.String(256), nullable=False)
     first_name = db.Column(db.String(50))
     last_name = db.Column(db.String(50))
     preferences = db.Column(db.Text) 
@@ -51,8 +81,31 @@ class Favorite(db.Model):
     )
 
 
-with app.app_context():
+_tables_ready = False
+
+
+def ensure_tables():
+    global _tables_ready
+    if _tables_ready:
+        return
     db.create_all()
+    _tables_ready = True
+
+
+try:
+    with app.app_context():
+        ensure_tables()
+except Exception as e:  # DB unreachable at cold start; retry on first request
+    print(f"Could not create tables at startup: {e}")
+
+
+@app.before_request
+def _make_sure_tables_exist():
+    if not _tables_ready:
+        try:
+            ensure_tables()
+        except Exception as e:
+            print(f"Database error: {e}")
 
 
 def generate_csrf_token():
@@ -88,21 +141,6 @@ def get_current_user_id():
     return session.get('user_id')
 
 
-def load_bus_stops():
-    try:
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        geojson_path = os.path.join(current_dir, 'Bus_Stops.geojson')
-        
-        if os.path.exists(geojson_path):
-            with open(geojson_path, 'r', encoding='utf-8') as f:
-                return json.load(f)
-        return {"type": "FeatureCollection", "features": []}
-    except Exception as e:
-        print(f"Error loading GeoJSON: {e}")
-        return {"type": "FeatureCollection", "features": []}
-
-bus_stops_data = load_bus_stops()
-
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -121,7 +159,6 @@ def toggle_favorite():
         if not get_current_user_id():
             return jsonify({'success': False, 'error': 'not_logged_in'}), 401
         data = request.get_json()
-        print(f"DEBUG toggle_favorite: Received data: {data}")
         
         atco_code = data.get('atco')
         user_id = get_current_user_id()
@@ -137,7 +174,6 @@ def toggle_favorite():
         
         if favorite:
   
-            print(f"DEBUG: Removing favorite {atco_code} for user {user_id}")
             db.session.delete(favorite)
             db.session.commit()
             return jsonify({
@@ -147,7 +183,6 @@ def toggle_favorite():
             })
         else:
       
-            print(f"DEBUG: Adding favorite {atco_code} for user {user_id}")
             new_favorite = Favorite(
                 user_id=user_id,
                 atco_code=atco_code,
@@ -169,7 +204,6 @@ def toggle_favorite():
             })
             
     except Exception as e:
-        print(f"DEBUG ERROR in toggle_favorite: {str(e)}")
         db.session.rollback()
         return jsonify({'success': False, 'error': str(e)})
 
@@ -233,25 +267,13 @@ def check_favorite(atco_code):
 @login_required
 def favorites():
     user_id = get_current_user_id()
-    print(f"DEBUG: Current user ID: {user_id}")
     
     user_favorites = Favorite.query.filter_by(
         user_id=user_id
     ).order_by(Favorite.added_at.desc()).all()
     
-    print(f"DEBUG: Number of favorites found: {len(user_favorites)}")
     
 
-    for i, fav in enumerate(user_favorites):
-        print(f"DEBUG Favorite {i+1}:")
-        print(f"  ATCO: {fav.atco_code}")
-        print(f"  Name: {fav.name}")
-        print(f"  Street: {fav.street}")
-        print(f"  Locality: {fav.locality}")
-        print(f"  Authority: {fav.authority}")
-        print(f"  Lines: {fav.lines}")
-        print(f"  Lat: {fav.lat}")
-        print(f"  Lng: {fav.lng}")
     
     return render_template('favorites.html', favorites=user_favorites)
 
@@ -297,7 +319,7 @@ def about():
 @app.route('/profile')
 @login_required
 def profile():
-    user = User.query.get(session['user_id'])
+    user = db.session.get(User, session['user_id'])
     return render_template('profile.html', user=user)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -354,7 +376,7 @@ def register():
 @login_required
 @csrf_protected
 def update_profile():
-    user = User.query.get(session['user_id'])
+    user = db.session.get(User, session['user_id'])
 
     user.first_name = request.form.get('first_name')
     user.last_name = request.form.get('last_name')
@@ -378,7 +400,8 @@ def logout():
 
 @app.route('/api/busstops')
 def get_bus_stops():
-    return jsonify(bus_stops_data)
+    # 2.6 MB file: let the static CDN serve it rather than the serverless function
+    return redirect(url_for('static', filename='data/Bus_Stops.geojson'), code=302)
 
 @app.route('/help-center')
 def help_center():
@@ -421,4 +444,4 @@ def inject_template_vars():
     }
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=os.environ.get('FLASK_DEBUG') == '1')
