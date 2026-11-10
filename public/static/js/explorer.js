@@ -45,15 +45,19 @@ const mapApp = {
   async loadStops() {
     try {
       console.log("Loading bus stops...");
-      const r = await fetch("/api/busstops");
+      // Fetch the static file directly (served by the CDN, no serverless
+      // function / database involved) and load favourites in parallel with a
+      // timeout, so a slow or broken database can never block the stops.
+      const [r] = await Promise.all([
+        fetch("/static/data/Bus_Stops.geojson"),
+        this.loadUserFavorites(),
+      ]);
       if (!r.ok) throw new Error(`HTTP error! status: ${r.status}`);
 
       const json = await r.json();
       console.log("Loaded stops:", json.features?.length || 0);
 
-      await this.loadUserFavorites();
-
-      const features = json.features.slice(0, this.MAX);
+      const features = json.features;
       const icon = this.createIcon();
       const favoriteIcon = this.createFavoriteIcon();
 
@@ -122,14 +126,23 @@ const mapApp = {
   },
 
   async loadUserFavorites() {
+    // Only logged-in users have favourites; skip the request otherwise.
+    if (window.isLoggedIn !== "true") return;
     try {
-      const response = await fetch("/get_favorites_count");
+      const ctl = new AbortController();
+      const timer = setTimeout(() => ctl.abort(), 5000);
+      const response = await fetch("/get_favorites_count", {
+        signal: ctl.signal,
+      });
+      clearTimeout(timer);
       if (response.ok) {
         const result = await response.json();
         console.log(`User has ${result.count} favorites`);
 
         if (result.count > 0) {
-          const favResponse = await fetch("/api/user_favorites");
+          const favResponse = await fetch("/api/user_favorites", {
+            signal: AbortSignal.timeout(5000),
+          });
           if (favResponse.ok) {
             const favData = await favResponse.json();
             this.userFavorites = new Set(

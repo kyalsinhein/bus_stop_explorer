@@ -42,7 +42,8 @@ def get_database_uri():
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-only-insecure-key')
 app.config['SQLALCHEMY_DATABASE_URI'] = get_database_uri()
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_pre_ping': True, 'pool_recycle': 280}
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_pre_ping': True, 'pool_recycle': 280,
+                                              'connect_args': {'connect_timeout': 5} if os.environ.get('DATABASE_URL') or os.environ.get('POSTGRES_URL') else {}}
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 app.config['SESSION_COOKIE_SECURE'] = ON_VERCEL
@@ -109,6 +110,9 @@ except Exception as e:  # DB unreachable at cold start; retry on first request
 
 @app.before_request
 def _make_sure_tables_exist():
+    # Pages that never touch the database must not wait on it
+    if request.endpoint in ('static', 'home', 'explorer', 'about', 'help_center', 'get_bus_stops'):
+        return
     if not _tables_ready:
         try:
             ensure_tables()
